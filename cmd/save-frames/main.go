@@ -59,6 +59,6 @@ func main() {
 
 // saving frame (image) to disk
 func (f *Frame) dump(name string, dir string) bool {
-	location := fmt.Sprintf("%s/%s-%d", dir, name, time.Now().UnixNano())
+	location := fmt.Sprintf("%s/%s-%d.jpeg", dir, name, time.Now().UnixNano())
 	return gocv.IMWrite(location, f.image)
 }
