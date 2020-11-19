@@ -1,12 +1,24 @@
 package main
 
 import (
-	cmd "github.com/serialberry/core-stream/internal/cmd/cli"
-	"github.com/serialberry/core-stream/internal/cmd/version"
+	"github.com/serialberry/core-stream/internal/cmd"
+	"github.com/spf13/cobra"
 )
 
+var (
+	cli *cobra.Command
+)
+
+func init() {
+	cli = &cobra.Command{
+		Use:   "cstream <command> <subcommand> [flags]",
+		Short: "Core Stream CLI",
+		Long:  "Command line tool for working with connected camera feeds",
+	}
+}
+
 func main() {
-	cli := cmd.NewCli()
-	cli.Add(version.NewVersion("0.0.1"))
-	cli.Run()
+	cli.AddCommand(cmd.VersionCommand("0.0.1"))
+	cli.AddCommand(cmd.CaptureCommand())
+	cli.Execute()
 }
