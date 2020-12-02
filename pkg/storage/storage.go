@@ -24,11 +24,11 @@ func (d *directory) IsDirectoryExists(path string) bool {
 // If directory created, return 'true' , error is nill.
 // If directory not created, return 'false' , error is nil.
 func CreateIfDirNotExists(provider DirectoryProvider, path string) (bool, error) {
-	if provider.IsDirectoryExists(path) {
+	if provider.IsExists(path) {
 		return false, nil
 	}
 
-	if err := provider.CreateDirectory(path); nil != err {
+	if err := provider.Create(path); nil != err {
 		return false, err
 	}
 
