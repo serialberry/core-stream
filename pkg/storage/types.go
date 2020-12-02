@@ -5,6 +5,6 @@ type DirectoryProvider interface {
 	CreateDirectory(path string) error  // create named directory along with parent dir(s).
 }
 
-type writer struct {
-	dir string
+type directory struct {
+	path string
 }

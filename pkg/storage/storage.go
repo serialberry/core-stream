@@ -7,14 +7,14 @@ import (
 // Implement FileSystemWriter interface.
 // Create a directory along with parent dir(s) using underline 'os' package.
 // If successful returns 'nil' otherwise error.
-func (s *writer) CreateDirectory(path string) error {
+func (s *directory) CreateDirectory(path string) error {
 	return os.MkdirAll(path, os.ModePerm)
 }
 
 // Implement FileSystemWriter interface.
 // Checks if named directory exists using underline 'os' package.
 // If directory exists, returns 'true' otherwise 'false'.
-func (d *writer) IsDirectoryExists(path string) bool {
+func (d *directory) IsDirectoryExists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
 }
