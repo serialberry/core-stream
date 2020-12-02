@@ -17,12 +17,12 @@ func (m *mockFileSystemError) Error() string {
 }
 
 // Mock DirectoryProvider interface
-func (m *mockDirectoryProvider) CreateDirectory(name string) error {
+func (m *mockDirectoryProvider) Create(name string) error {
 	return m.err
 }
 
 // Mock DirectoryProvider interface
-func (m *mockDirectoryProvider) IsDirectoryExists(path string) bool {
+func (m *mockDirectoryProvider) IsExists(path string) bool {
 	return m.existingDir
 }
 
