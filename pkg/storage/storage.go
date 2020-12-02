@@ -1,0 +1,36 @@
+package storage
+
+import (
+	"os"
+)
+
+// Implement FileSystemWriter interface.
+// Create a directory along with parent dir(s) using underline 'os' package.
+// If successful returns 'nil' otherwise error.
+func (s *writer) CreateDirectory(path string) error {
+	return os.MkdirAll(path, os.ModePerm)
+}
+
+// Implement FileSystemWriter interface.
+// Checks if named directory exists using underline 'os' package.
+// If directory exists, returns 'true' otherwise 'false'.
+func (d *writer) IsDirectoryExists(path string) bool {
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
+}
+
+// Creates named directory along with parents if directory not found.
+// Error returns only when there is a file system error.
+// If directory created, return 'true' , error is nill.
+// If directory not created, return 'false' , error is nil.
+func CreateIfDirNotExists(provider DirectoryProvider, path string) (bool, error) {
+	if provider.IsDirectoryExists(path) {
+		return false, nil
+	}
+
+	if err := provider.CreateDirectory(path); nil != err {
+		return false, err
+	}
+
+	return true, nil
+}
