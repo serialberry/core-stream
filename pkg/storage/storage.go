@@ -53,9 +53,14 @@ func GenerateSequenceImageName(seq SequenceProvider, dir string, baseName string
 	return filepath.Join(dir, fmt.Sprintf("%s-%s.%s", baseName, seq.Next(), imageType))
 }
 
+// Initialise new sequence id
+func NewSequenceId() SequenceId {
+	return SequenceId(fmt.Sprint(time.Now().UnixNano()))
+}
+
 // Implement SequenceProvider interface
 // Generate time based next id (Unix time nano seconds)
-func (s *SequenceId) Next() string {
+func (s SequenceId) Next() string {
 	return fmt.Sprint(time.Now().UnixNano())
 }
 
