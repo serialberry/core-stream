@@ -6,8 +6,8 @@ package capture
 
 import (
 	"fmt"
-	"time"
 
+	"github.com/serialberry/core-stream/pkg/storage"
 	"gocv.io/x/gocv"
 )
 
@@ -19,7 +19,8 @@ type Device struct {
 
 // start reading from camera stream
 func (d *Device) Read() {
-	d.MakeDirIfNotExists()
+	directory := &storage.Directory{Path: d.Dir}
+	storage.CreateIfDirNotExists(directory, directory.Path)
 
 	device, err := gocv.OpenVideoCapture(d.Id)
 	if nil != err {
@@ -27,34 +28,25 @@ func (d *Device) Read() {
 	}
 	defer device.Close()
 
-	image := gocv.NewMat()
-	defer image.Close()
+	image := &storage.File{Data: gocv.NewMat(), Path: d.Name}
+	defer image.Data.Close()
+
+	nextId := storage.NewSequenceId()
 
 	for {
-		if success := device.Read(&image); !success {
+		if success := device.Read(&image.Data); !success {
 			fmt.Printf("Error reading device: %v\n", d.Id)
 			return
 		}
 
-		if image.Empty() {
+		if image.Data.Empty() {
 			fmt.Println("frame empty")
 			continue
 		}
 
-		if success := d.Save(image); !success {
+		if success := storage.SaveImageToDisk(image, nextId, directory.Path, image.Path); !success {
 			fmt.Printf("Error saving frame to disk: %v\n", err)
 			return
 		}
 	}
-}
-
-// create directory location if not exists
-func (d *Device) MakeDirIfNotExists() {
-
-}
-
-// write frame to disk
-func (d *Device) Save(frame gocv.Mat) bool {
-	image := fmt.Sprintf("%s/%s-%d.jpeg", d.Dir, d.Name, time.Now().UnixNano())
-	return gocv.IMWrite(image, frame)
 }
